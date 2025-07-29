@@ -18,5 +18,6 @@ class NoteOut(NoteBase):
     id: int
     tags: List[TagOut]
 
-class Config:
-    from_attributes = True
+    model_config = {
+        "from_attributes": True
+    }

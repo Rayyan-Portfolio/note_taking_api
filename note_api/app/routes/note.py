@@ -3,17 +3,11 @@ from sqlalchemy.orm import Session
 from typing import List
 
 from app.schemas.note import NoteCreate, NoteOut, NoteUpdate
-from app.db.session import SessionLocal
+from app.db.session import get_db
 from app.crud import note as note_crud
 
 router = APIRouter(prefix="/notes", tags=["Notes"])
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 @router.post("/", response_model=NoteOut)
 def create_note(note: NoteCreate, db: Session = Depends(get_db)):

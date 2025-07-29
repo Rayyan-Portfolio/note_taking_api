@@ -25,6 +25,7 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from app.db.session import Base
+from app.models.user import User
 from app.models.note import Note
 from app.models.tag import Tag
 from app.models.association import note_tags  # association table
