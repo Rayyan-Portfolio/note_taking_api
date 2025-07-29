@@ -1,6 +1,6 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
-from typing import List
+from typing import List, Optional
 
 from app.schemas.note import NoteCreate, NoteOut, NoteUpdate
 from app.db.session import get_db
@@ -13,9 +13,16 @@ router = APIRouter(prefix="/notes", tags=["Notes"])
 def create_note(note: NoteCreate, db: Session = Depends(get_db)):
     return note_crud.create_note(db, note)
 
+# @router.get("/", response_model=List[NoteOut])
+# def read_all_notes(db: Session = Depends(get_db)):
+#     return note_crud.get_all_notes(db)
 @router.get("/", response_model=List[NoteOut])
-def read_all_notes(db: Session = Depends(get_db)):
-    return note_crud.get_all_notes(db)
+def read_all_notes(
+    db: Session = Depends(get_db),
+    search: Optional[str] = Query(None, description="Search keyword in title or content"),
+    tag: Optional[str] = Query(None, description="Filter notes by tag")
+):
+    return note_crud.get_all_notes(db, search=search, tag=tag)
 
 @router.get("/{note_id}", response_model=NoteOut)
 def read_note(note_id: int, db: Session = Depends(get_db)):

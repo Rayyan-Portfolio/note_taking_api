@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+from sqlalchemy import or_
 from typing import List, Optional
 from app.models.note import Note
 from app.models.tag import Tag
@@ -21,8 +22,25 @@ def create_note(db: Session, note_data: NoteCreate) -> Note:
 def get_note(db: Session, note_id: int) -> Optional[Note]:
     return db.query(Note).filter(Note.id == note_id).first()
 
-def get_all_notes(db: Session) -> List[Note]:
-    return db.query(Note).all()
+# def get_all_notes(db: Session) -> List[Note]:
+#     return db.query(Note).all()
+def get_all_notes(db: Session, search: str = None, tag: str = None):
+    query = db.query(Note)
+
+    if search:
+        search_term = f"%{search.lower()}%"
+        query = query.filter(
+            or_(
+                Note.title.ilike(search_term),
+                Note.content.ilike(search_term)
+            )
+        )
+
+    if tag:
+        query = query.filter(Note.tags.any(name=tag))
+        # query = query.filter(Note.tags == tag)
+
+    return query.all()
 
 def update_note(db: Session, note_id: int, note_data: NoteUpdate) -> Optional[Note]:
     note = db.query(Note).filter(Note.id == note_id).first()
