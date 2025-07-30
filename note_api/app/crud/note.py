@@ -9,7 +9,6 @@ from app.crud.tag import get_or_create_tag
 
 def create_note(db: Session, note_data: NoteCreate) -> Note:
     note = Note(title=note_data.title, content=note_data.content)
-    # Attach tags
     for tag_name in note_data.tags:
         tag = get_or_create_tag(db, tag_name)
         note.tags.append(tag)
@@ -22,8 +21,6 @@ def create_note(db: Session, note_data: NoteCreate) -> Note:
 def get_note(db: Session, note_id: int) -> Optional[Note]:
     return db.query(Note).filter(Note.id == note_id).first()
 
-# def get_all_notes(db: Session) -> List[Note]:
-#     return db.query(Note).all()
 def get_all_notes(db: Session, search: str = None, tag: str = None):
     query = db.query(Note)
 
@@ -38,7 +35,6 @@ def get_all_notes(db: Session, search: str = None, tag: str = None):
 
     if tag:
         query = query.filter(Note.tags.any(name=tag))
-        # query = query.filter(Note.tags == tag)
 
     return query.all()
 

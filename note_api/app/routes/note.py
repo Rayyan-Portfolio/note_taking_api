@@ -13,9 +13,6 @@ router = APIRouter(prefix="/notes", tags=["Notes"])
 def create_note(note: NoteCreate, db: Session = Depends(get_db)):
     return note_crud.create_note(db, note)
 
-# @router.get("/", response_model=List[NoteOut])
-# def read_all_notes(db: Session = Depends(get_db)):
-#     return note_crud.get_all_notes(db)
 @router.get("/", response_model=List[NoteOut])
 def read_all_notes(
     db: Session = Depends(get_db),

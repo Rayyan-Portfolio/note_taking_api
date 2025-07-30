@@ -7,7 +7,7 @@ class NoteBase(BaseModel):
     content: str
 
 class NoteCreate(NoteBase):
-    tags: List[str]  # Just tag names to create/reuse
+    tags: List[str] 
 
 class NoteUpdate(BaseModel):
     title: Optional[str] = None
