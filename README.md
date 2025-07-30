@@ -243,7 +243,7 @@ Returns:
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/yourusername/note-api.git
+git clone https://github.com/Rayyan-Portfolio/note_taking_api.git
 cd note-api
 ```
 
@@ -267,32 +267,91 @@ uvicorn app.main:app --reload
 
 ## 🐳 Docker Deployment
 
-### 1. Build Image
+### 1. 🏗 Build Docker Image
+
+Open your terminal in the project root and run:
 
 ```bash
 docker build -t note-api .
 ```
 
-### 2. Run Container
+> 💡 **System Compatibility for Docker Build:**
+>
+> - **Windows / Mac (Intel)**: Use the default Docker Desktop settings.
+> - **Mac (ARM64/M1/M2)**: Make sure your base image supports ARM. `python:3.10-slim` does. Docker Desktop automatically builds for ARM, so you're good to go.
+> - If needed, force build for x86 on ARM:
+>   ```bash
+>   docker build --platform linux/amd64 -t note-api .
+>   ```
+
+---
+
+### 2. 🚀 Run the Container Locally
 
 ```bash
 docker run -d -p 8000:8000 --env-file .env note-api
 ```
 
-> ✅ App runs at `http://localhost:8000`
+✅ App runs at:  
+[http://localhost:8000](http://localhost:8000)
 
 ---
 
-## ☁️ Deploy on Render (Live Hosting)
+## 🐳 Docker Deployment
 
-1. Go to [https://render.com](https://render.com)
-2. Create a new **Web Service**
-3. Connect to your GitHub repo
-4. Set the following:
-   - **Environment:** `Docker`
-   - **Start command:** _(leave blank as `ENTRYPOINT` is set)_
-   - Add `.env` secrets manually to Render's environment tab
-5. Deploy
+### 🔧 1. Build Image Locally
+
+**On macOS with Apple Silicon (M1/M2 or later):**
+
+```bash
+docker build --platform=linux/amd64 -t note-api .
+```
+
+**On macOS Intel / Windows / Linux:**
+
+```bash
+docker build -t note-api .
+```
+
+> ✅ Use `--platform=linux/amd64` on Apple Silicon to ensure compatibility with Render and most Linux-based servers.
+
+---
+
+### ▶️ 2. Run the Container Locally
+
+```bash
+docker run -d -p 8000:8000 --env-file .env note-api
+```
+
+Then open: [http://localhost:8000](http://localhost:8000)
+
+---
+
+## ☁️ Deploy to Render (Live Hosting)
+
+Go to [https://render.com](https://render.com) and:
+
+### Option 1: **Connect GitHub Repo (Recommended for CI/CD)**
+
+1. Click **"New Web Service"**.
+2. Choose **"Web Service"** → connect your GitHub repo.
+3. Choose **Environment**: `Docker`.
+4. **Leave Start Command blank** (handled by `ENTRYPOINT`).
+5. Go to **Environment** tab in Render and add:
+   - `SECRET_KEY=your_secret_key`
+   - `ACCESS_TOKEN_EXPIRE_MINUTES=30`
+   - Any other variables from `.env`
+6. Click **Deploy**.
+
+### Option 2: **Deploy from Docker Hub (Prebuilt Image)**
+
+1. Choose **“New Web Service”** > “Docker Image”.
+2. Enter Docker image name (e.g. `rayyanportfolio/note-api`).
+3. Set the region and instance type.
+4. Add required env vars (`SECRET_KEY`, etc.).
+5. Click **Deploy**.
+
+> 🧠 This method is ideal if you’ve already pushed your image to [hub.docker.com](https://hub.docker.com).
 
 ---
 
