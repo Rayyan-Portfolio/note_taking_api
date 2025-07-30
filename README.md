@@ -142,28 +142,10 @@ GET /notes/?search=hello&tag=todo
 
 ---
 
-### 📋 List All Notes
+### 📋 List All Notes (no filters)
 
 ```http
-GET /notes/
-Authorization: Bearer <token>
-```
-
-Returns:
-
-```json
-[
-  {
-    "id": 1,
-    "title": "Test Note",
-    "content": "Hello World!",
-    "tags": [
-      { "id": 1, "name": "todo" },
-      { "id": 2, "name": "important" }
-    ],
-    "owner_id": 1
-  }
-]
+GET /notes/?search=&tag=
 ```
 
 ---
@@ -172,22 +154,6 @@ Returns:
 
 ```http
 GET /notes/1
-Authorization: Bearer <token>
-```
-
-Returns:
-
-```json
-{
-  "id": 1,
-  "title": "Test Note",
-  "content": "Hello World!",
-  "tags": [
-    { "id": 1, "name": "todo" },
-    { "id": 2, "name": "important" }
-  ],
-  "owner_id": 1
-}
 ```
 
 ---
@@ -196,26 +162,10 @@ Returns:
 
 ```http
 PUT /notes/1
-Authorization: Bearer <token>
 {
   "title": "Updated Title",
   "content": "Updated content",
   "tags": ["urgent", "work"]
-}
-```
-
-Returns:
-
-```json
-{
-  "id": 1,
-  "title": "Updated Title",
-  "content": "Updated content",
-  "tags": [
-    { "id": 3, "name": "urgent" },
-    { "id": 4, "name": "work" }
-  ],
-  "owner_id": 1
 }
 ```
 
@@ -225,15 +175,6 @@ Returns:
 
 ```http
 DELETE /notes/1
-Authorization: Bearer <token>
-```
-
-Returns:
-
-```json
-{
-  "detail": "Note deleted successfully"
-}
 ```
 
 ---
@@ -244,7 +185,7 @@ Returns:
 
 ```bash
 git clone https://github.com/Rayyan-Portfolio/note_taking_api.git
-cd note-api
+cd note_taking_api/note_api
 ```
 
 ### 2. Create `.env` file
@@ -259,6 +200,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES=30
 
 ```bash
 pip install -r requirements.txt
+alembic revision --autogenerate -m "Initial migration"  # Optional if not yet generated
 alembic upgrade head
 uvicorn app.main:app --reload
 ```
@@ -267,53 +209,21 @@ uvicorn app.main:app --reload
 
 ## 🐳 Docker Deployment
 
-### 1. 🏗 Build Docker Image
-
-Open your terminal in the project root and run:
-
-```bash
-docker build -t note-api .
-```
-
-> 💡 **System Compatibility for Docker Build:**
->
-> - **Windows / Mac (Intel)**: Use the default Docker Desktop settings.
-> - **Mac (ARM64/M1/M2)**: Make sure your base image supports ARM. `python:3.10-slim` does. Docker Desktop automatically builds for ARM, so you're good to go.
-> - If needed, force build for x86 on ARM:
->   ```bash
->   docker build --platform linux/amd64 -t note-api .
->   ```
-
----
-
-### 2. 🚀 Run the Container Locally
-
-```bash
-docker run -d -p 8000:8000 --env-file .env note-api
-```
-
-✅ App runs at:  
-[http://localhost:8000](http://localhost:8000)
-
----
-
-## 🐳 Docker Deployment
-
 ### 🔧 1. Build Image Locally
 
-**On macOS with Apple Silicon (M1/M2 or later):**
+**On macOS with Apple Silicon (M1/M2 or later)/ Linux:**
 
 ```bash
 docker build --platform=linux/amd64 -t note-api .
 ```
 
-**On macOS Intel / Windows / Linux:**
+> ✅ Use `--platform=linux/amd64` on Apple Silicon to ensure compatibility with Render and most Linux-based servers.
+
+**On macOS Intel / Windows :**
 
 ```bash
 docker build -t note-api .
 ```
-
-> ✅ Use `--platform=linux/amd64` on Apple Silicon to ensure compatibility with Render and most Linux-based servers.
 
 ---
 
@@ -348,7 +258,7 @@ Go to [https://render.com](https://render.com) and:
 1. Choose **“New Web Service”** > “Docker Image”.
 2. Enter Docker image name (e.g. `rayyanportfolio/note-api`).
 3. Set the region and instance type.
-4. Add required env vars (`SECRET_KEY`, etc.).
+4. Add required env vars (`SECRET_KEY`,`PORT=XXXX` etc.).
 5. Click **Deploy**.
 
 > 🧠 This method is ideal if you’ve already pushed your image to [hub.docker.com](https://hub.docker.com).
@@ -358,6 +268,4 @@ Go to [https://render.com](https://render.com) and:
 ## 🧑‍💻 Author
 
 **Ahmad Rayyan** – Python Backend Developer  
-GitHub: [@rayyanportfolio](https://github.com/rayyanportfolio)
-
----
+GitHub: [@rayyanportfolio](https://github.com/Rayyan-Portfolio)
