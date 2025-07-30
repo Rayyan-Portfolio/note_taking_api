@@ -43,19 +43,20 @@ A clean, modular, and production-ready **Note Taking API** built with **FastAPI*
 note_api/
 │
 ├── app/
-│   ├── main.py               # FastAPI entrypoint
-│   ├── crud/               # DB logic
+│   ├── main.py            # FastAPI entrypoint
+│   ├── auth.py
+│   ├── crud/              # DB logic
 │       └── note.py
 │       └── tag.py
 │       └── user.py
-│   ├── database/           # DB config
+│   ├── database/          # DB config
 │       └── session.py
-│   ├── models/             # SQLAlchemy models
+│   ├── models/            # SQLAlchemy models
 │       └── association.py
 │       └── note.py
 │       └── tag.py
 │       └── user.py
-│   ├── routes/
+│   ├── routes/            # FastAPI routers for notes, auth
 │       └── auth.py
 │       └── note.py
 │       └── tag.py
@@ -64,10 +65,10 @@ note_api/
 │       └── tag.py
 │       └── user.py
 │   ├── utils/
-│       └── token.py          # JWT utils
+│       └── token.py       # JWT utils
 │       └── hashing.py
 │
-├── alembic/                  # DB migrations
+├── alembic/               # DB migrations
 ├── .gitignore
 ├── .dockerignore
 ├── dockerfile
